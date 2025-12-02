@@ -5,7 +5,7 @@
             <li class="nav-item">
                 <a class="nav-link {% if url_name == 'index' %} active {% endif %}" aria-current="true" href="{% url 'index' %}">Головна сторінка</a>
             </li>
-            {% if request.user.authenticated %}
+            {% if request.user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link {% if url_name == 'profile' %} active {% endif %}" aria-current="true" href="{% url 'profile' %}">Кабінет</a>
             </li>

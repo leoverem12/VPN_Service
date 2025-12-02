@@ -16,13 +16,13 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
-MEDIA_PATH = BASE_DIR / "media"
+MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = 'media/'
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "/sign_in/"
 SITE_ID = 1
 
 
-LOGIN_REDIRECT_URL = '/accounts/' # Перенаправляти на головну сторінку
+LOGIN_REDIRECT_URL = '/' # Перенаправляти на головну сторінку
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -55,8 +55,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'Accounts',
-    'WindScribe'
+    'WindScribe',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -105,8 +110,8 @@ DATABASES = {
 }
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "vpn-service",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://default:N6BqkClUBeiOtN7G6kAm7nIM5jQt3EqQ@redis-16028.c328.europe-west3-1.gce.cloud.redislabs.com:16028",
     }
 }
 

@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.contrib import messages
 from django.core.cache import cache
+from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.cache import cache_page
+
 
 from .forms import ProfileForm, UserForm
 
@@ -47,13 +50,52 @@ def logout_user(request: HttpRequest):
     logout(request)
     return redirect("sign_in")
 
+# @login_required
+# def profile(request: HttpRequest):
+#     user_form = UserForm(data=request.POST or None, instace=request.user)
+#     profile_form = ProfileForm(data=request.POST, files=request.FILES, instance=request.user.details)
+#     if request.method == "POST" and user_form.changed_data or request.method == "POST" and profile_form.changed_data:
+#         user_form.save()
+#         profile_form.save()
+#         messages.info(request, "Succ")
+#         return redirect("profile")
+#     return render(request, "profile.html", context=dict(user_form=user_form, profile_form=profile_form))
+
+
 @login_required
-def profile(request: HttpRequest):
-    user_form = UserForm(data=request.POST or None, instace=request.user)
-    profile_form = ProfileForm(data=request.POST, files=request.FILES, instance=request.user.details)
-    if request.method == "POST" and user_form.changed_data or request.method == "POST" and profile_form.changed_data:
-        user_form.save()
-        profile_form.save()
-        messages.info(request, "Succ")
-        return redirect("profile")
+@require_GET
+@cache_page(60)
+def profile_get(request: HttpRequest):
+    # user = cache.get(f"user_form_{request.user.username}")
+    # profile = cache.get(f"profile_form_{request.user.username}")\
+    
+    # if not user:
+    #     user_form = UserForm(instance=request.user)
+    #     cache.set(f"user_form_{request.user.username}", request.user, 30)
+
+    # if not profile:
+    #     profile_form = ProfileForm(instance=request.user.details)
+    #     cache.get(f"profile_form_{request.user.username}", profile_form, 30)
+
+
+    user_form = UserForm(instance=request.user)
+    profile_form = ProfileForm(instance=request.user.details)
     return render(request, "profile.html", context=dict(user_form=user_form, profile_form=profile_form))
+
+
+@login_required
+@require_POST
+def profile_post(request: HttpRequest):
+    user_form = UserForm(data=request.POST, instace=request.user)
+    profile_form = ProfileForm(data=request.POST, files=request.FILES, instance=request.user.details)
+    if user_form.is_valid() and user_form.changed_data:
+        user_form.save()
+    if profile_form.is_valid():
+        if profile_form.changed_data:
+            profile_form.save()
+    else:
+        messages.error(request, "hell nah")
+        
+        
+    messages.info(request, "Succ")
+    return redirect("profile")

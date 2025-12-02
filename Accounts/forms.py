@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 from django.contrib.auth.models import User
+from captcha.fields import CaptchaField
 
 from .models import Profile
 
@@ -21,10 +22,11 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={"class": "form-control"}))
 
 
-class ProfileForm(forms.Form):
+class ProfileForm(forms.ModelForm):
     avatar = forms.ImageField(widget=forms.FileInput(attrs={"class": "form-control"}))
     bio = forms.CharField(widget=forms.Textarea(attrs={"class": "form-control"}), required=False)
     phone_number = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}), required=False)
+    captcha = CaptchaField(label="Введіть символ")
 
     class Meta:
         model = Profile

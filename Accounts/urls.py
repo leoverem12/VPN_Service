@@ -9,4 +9,5 @@ urlpatterns =[
     path("profile/", views.profile_get, name="profile"),
     path("profile-post/", views.profile_post, name="profile_post"),
     path("logout/", views.logout_user, name="logout"),
+    path("api/user/", views.test_api),
 ]

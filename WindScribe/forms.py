@@ -7,5 +7,5 @@ class SubForm(forms.ModelForm):
     sub = forms.ChoiceField(
         choices=Subscription,
         label="Вибріть підпискау",
-        attrs=forms.RadioSelect(attrs={}),
+        attrs=forms.Select(attrs={"class": "form-control"}),
         )

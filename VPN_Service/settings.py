@@ -21,7 +21,7 @@ MEDIA_URL = 'media/'
 LOGIN_URL = "/sign_in/"
 SITE_ID = 1
 
-
+SESSION_COOKIE_AGE = 1209600
 LOGIN_REDIRECT_URL = '/' # Перенаправляти на головну сторінку
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'Accounts',
     'WindScribe',
+    'rest_framework',
     'captcha',
 ]
 
@@ -104,7 +105,7 @@ DATABASES = {
         'NAME': os.getenv("NAME"),
         "HOST": os.getenv("HOST"),
         "PORT": os.getenv("PORT"),
-        'USER': os.getenv("USER"),
+        'USER': os.getenv("USER_DB"),
         "PASSWORD": os.getenv("PASSWORD")
     }
 }

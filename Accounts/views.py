@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpo
+from .forms import SignUpo, LoginForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -9,7 +9,10 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.cache import cache_page
-
+from .serializer import ProfileSerializer
+from .models import Profile
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from .forms import ProfileForm, UserForm
 
@@ -26,7 +29,7 @@ def sign_up(request: HttpRequest):
 
 
 def sign_in(request: HttpRequest):
-    form = AuthenticationForm(request, data=request.POST or None)
+    form = LoginForm(request, data=request.POST or None)
     if request.method =="POST" and form.is_valid():
         user = authenticate(
             username=form.cleaned_data["username"],
@@ -37,6 +40,10 @@ def sign_in(request: HttpRequest):
             return redirect("sign_in")
         
         login(request=request, user=user)
+        if form.cleaned_data.get("remember"):
+            request.session.set_expiry(None)
+        else:
+            request.session.set_expiry(0)
         return redirect("index")
     return render(request, "sign_in.html", dict(form=form))
 
@@ -99,3 +106,10 @@ def profile_post(request: HttpRequest):
         
     messages.info(request, "Succ")
     return redirect("profile")
+
+
+@api_view(["GET"])
+def test_api(request: HttpRequest):
+    profile = Profile.objects.get(user=request.user)
+    data = ProfileSerializer(profile)
+    return Response(data.data)

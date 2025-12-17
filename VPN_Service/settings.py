@@ -40,9 +40,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 install_as_MySQLdb()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition

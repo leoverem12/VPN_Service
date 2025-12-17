@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 style="color: rgb(117, 4, 4);">Виберіть підпиши</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Купити підписку</button>
+</form>
+{% endblock content %}

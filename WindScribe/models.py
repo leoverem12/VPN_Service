@@ -20,10 +20,10 @@ class Subscription(models.Model):
         return f"{self.name} -> cina {self.price} -> survicu {self.services}"
 
 class Service(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     ipv_4_ext = models.GenericIPAddressField(unique=True, null=True, blank=True, default=None)
     price_per_month_ext = models.FloatField(default=0)
-    ipv_4_local = models.GenericIPAddressField(unique=True)
+    ipv_4_local = models.GenericIPAddressField(unique=True, null=True, blank=True, default=None)
     price_per_month_4_local = models.FloatField(default=0)
-    ipv_6 = models.GenericIPAddressField(unique=True)
-    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+    ipv_6 = models.GenericIPAddressField(unique=True, null=True, blank=True, default=None)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, default=None)

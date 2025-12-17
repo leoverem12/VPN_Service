@@ -32,7 +32,8 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'Accounts',
     'WindScribe',
+   'whitenoise.middleware.WhiteNoiseMiddleware',
     'rest_framework',
     'captcha',
 ]
@@ -88,6 +90,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+            ],
+            'builtins': [
+                'django.templatetags.static',
             ],
         },
     },

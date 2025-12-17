@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns =[
-   
+   path('', views.get_subscriptions, name="subscriptions")
 ]

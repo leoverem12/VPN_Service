@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpo, LoginForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.contrib import messages
 from django.core.cache import cache
 from django.views.decorators.http import require_GET, require_POST
@@ -21,10 +21,13 @@ from .forms import ProfileForm, UserForm
 
 def sign_up(request: HttpRequest):
     form = SignUpo(data=request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        messages.success(request=request, message="KO")
-        return redirect("sign_in")
+    if request.method == "POST":
+        if form.is_valid():
+           form.save()
+           # messages.success(request=request, message="KO")
+           return JsonResponse(dict(status="success"), status=200)
+        else:
+           return JsonResponse(dict(status="error", errors=form.errors), status=400)
     return render(request, "sign_up.html", dict(form=form))
 
 

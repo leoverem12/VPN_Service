@@ -3,9 +3,10 @@ from django import forms
 from .models import Subscription
 
 
-class SubForm(forms.ModelForm):
-    sub = forms.ChoiceField(
-        choices=Subscription,
+class SubForm(forms.Form):
+    sub = forms.ModelChoiceField(
+        queryset=Subscription.objects.all(),
         label="Вибріть підпискау",
-        attrs=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        empty_label="Bибріть підпискау"
         )

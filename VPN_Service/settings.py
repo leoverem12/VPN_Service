@@ -13,6 +13,13 @@ from pymysql import install_as_MySQLdb
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
+
+
+
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
@@ -40,9 +47,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 install_as_MySQLdb()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -105,14 +112,11 @@ WSGI_APPLICATION = 'VPN_Service.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv("ENGINE"),
-        'NAME': os.getenv("NAME"),
-        "HOST": os.getenv("HOST"),
-        "PORT": os.getenv("PORT"),
-        'USER': os.getenv("USER_DB"),
-        "PASSWORD": os.getenv("PASSWORD")
-    }
+    'default': dj_database_url.config(
+    default='postgres://...',
+    conn_max_age=600,
+    conn_health_checks=True,
+)
 }
 CACHES = {
     "default": {
